@@ -3,6 +3,7 @@ import { Geist_Mono, Archivo } from "next/font/google";
 import "./globals.css";
 
 import Header from "@/components/ui/Header";
+import CustomCursor from "@/components/ui/CustomCursor";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistMono.variable} ${archivo.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <CustomCursor />
         <Header />
         {children}
       </body>
