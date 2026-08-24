@@ -98,7 +98,9 @@ export default function Hero() {
             <h1 className="text-[46px] lg:text-[120px] 3xl:text-[174px] font-extrabold text-center lg:leading-[1.10] xl">
               FULL STACK
               <br />
-              DEVELOPER
+              <span className="text-transparent [-webkit-text-stroke:1.5px_var(--foreground)] lg:[-webkit-text-stroke:2.5px_var(--foreground)] 3xl:[-webkit-text-stroke:3.5px_var(--foreground)]">
+                DEVELOPER
+              </span>
             </h1>
 
             {/* offset elements */}
