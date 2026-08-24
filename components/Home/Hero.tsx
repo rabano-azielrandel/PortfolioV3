@@ -35,9 +35,6 @@ function useIsDesktop(minWidth: number) {
 export default function Hero() {
   // element being tracked
   const trackRef = useRef<HTMLDivElement>(null);
-
-  // false below FLIP_MIN_WIDTH - used to swap the live scroll-driven
-  // scale/rotateY for plain static "resting" values on smaller screens.
   const isDesktop = useIsDesktop(FLIP_MIN_WIDTH);
 
   // live readout of where we are in the tracked element
@@ -54,9 +51,7 @@ export default function Hero() {
   // the flip itself. one linear turn, 0deg to 180deg, over flipProgress.
   const rotateY = useTransform(flipProgress, [0, 1], [0, 180]);
 
-  // always the exact opposite of rotateY - applied to the image so it
-  // cancels the card's rotation out and stays facing the viewer, while the
-  // card itself (frame, shadow, clipping) keeps visibly turning around it.
+  // always the exact opposite of rotateY
   const counterRotateY = useTransform(rotateY, (v) => -v);
 
   // for image box growth
@@ -65,8 +60,30 @@ export default function Hero() {
   });
 
   const headingOpacity = useTransform(scrollYProgress, [0, 0.15, 1], [1, 0, 0]);
-  const introOpacity = useTransform(scrollYProgress, [0.8, 1], [0, 1]);
-  const introY = useTransform(scrollYProgress, [0.8, 1], [40, 0]);
+
+  const mapRange = (
+    value: number,
+    inMin: number,
+    inMax: number,
+    outMin: number,
+    outMax: number,
+  ) => {
+    const t = Math.min(Math.max((value - inMin) / (inMax - inMin), 0), 1);
+    return outMin + t * (outMax - outMin);
+  };
+
+  const greetingOpacity = useTransform(scrollYProgress, (v) =>
+    mapRange(v, 0.75, 0.9, 0, 1),
+  );
+  const greetingY = useTransform(scrollYProgress, (v) =>
+    mapRange(v, 0.75, 0.9, 40, 0),
+  );
+  const restOpacity = useTransform(scrollYProgress, (v) =>
+    mapRange(v, 0.9, 1, 0, 1),
+  );
+  const restY = useTransform(scrollYProgress, (v) =>
+    mapRange(v, 0.9, 1, 40, 0),
+  );
 
   return (
     <section ref={trackRef} className="relative h-[150vh] pb-10">
@@ -90,23 +107,29 @@ export default function Hero() {
           {/* image + intro*/}
           <div className="relative flex-1">
             {/* intro layer - fills the whole stage, image renders over it */}
-            <motion.div
-              style={{ opacity: introOpacity, y: introY }}
-              className="absolute inset-x-0 bottom-10 h-132 flex justify-between items-center gap-8"
-            >
+            <div className="absolute inset-x-0 bottom-10 h-132 flex flex-col lg:flex-row justify-between items-center gap-8">
               {/* left text */}
               <div className="h-full flex flex-col justify-between max-w-sm">
-                <p className="text-6xl lg:text-7xl font-medium">
+                <motion.p
+                  style={{ opacity: greetingOpacity, y: greetingY }}
+                  className="text-6xl lg:text-7xl font-medium"
+                >
                   Oh, <br /> hi there.
-                </p>
-                <p className="text-xl font-light">
+                </motion.p>
+                <motion.p
+                  style={{ opacity: restOpacity, y: restY }}
+                  className="text-xl font-light"
+                >
                   I'm Aziel, A-S-I-Y-E-L. A full-stack developer blending
                   creative thinking with logical structure.
-                </p>
+                </motion.p>
               </div>
 
               {/* right text */}
-              <div className="h-full flex flex-col justify-end max-w-sm text-xl font-light gap-4">
+              <motion.div
+                style={{ opacity: restOpacity, y: restY }}
+                className="h-full flex flex-col justify-end max-w-sm text-xl font-light gap-4"
+              >
                 <p>
                   I'm drawn to the space where design meets logic—building
                   interfaces that feel intentional and systems that are built to
@@ -120,8 +143,8 @@ export default function Hero() {
                   <span className="group relative w-7 h-7 flex justify-center items-center rounded-xl border border-black overflow-hidden">
                     {/* Diagonal fill layer, scoped to this span only */}
                     <span
-                      className="absolute inset-0 rounded-xl bg-black origin-bottom-left scale-0 
-                        transition-transform duration-300 ease-out 
+                      className="absolute inset-0 rounded-xl bg-black origin-bottom-left scale-0
+                        transition-transform duration-300 ease-out
                         group-hover:scale-100"
                     />
 
@@ -134,8 +157,8 @@ export default function Hero() {
                     />
                   </span>
                 </a>
-              </div>
-            </motion.div>
+              </motion.div>
+            </div>
 
             {/* hero image card */}
             <motion.div
@@ -145,7 +168,7 @@ export default function Hero() {
                 transformPerspective: 800,
                 transformStyle: "preserve-3d", // preserves the inner counter
               }}
-              className="absolute inset-0 m-auto w-44 h-52 mb-48 rounded-lg overflow-hidden bg-gray-700 z-10"
+              className="lg:absolute lg:inset-0 m-auto w-44 h-52 mb-48 rounded-lg overflow-hidden bg-gray-700 z-10"
             >
               {/* counter-rotated wrapper*/}
               <motion.div
