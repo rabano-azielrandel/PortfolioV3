@@ -95,7 +95,7 @@ export default function Hero() {
             style={{ opacity: headingOpacity }}
             className="relative w-full flex flex-col justify-center items-center py-24"
           >
-            <h1 className="text-[46px] lg:text-[120px] 3xl:text-[174px] font-extrabold text-center">
+            <h1 className="text-[46px] lg:text-[120px] 3xl:text-[174px] font-extrabold text-center lg:leading-[1.10] xl">
               FULL STACK
               <br />
               DEVELOPER
@@ -165,10 +165,11 @@ export default function Hero() {
               style={{
                 scale: isDesktop ? scale : 1,
                 rotateY: isDesktop ? rotateY : 0,
+                opacity: isDesktop ? 1 : headingOpacity,
                 transformPerspective: 800,
                 transformStyle: "preserve-3d", // preserves the inner counter
               }}
-              className="lg:absolute lg:inset-0 m-auto w-44 h-52 mb-48 rounded-lg overflow-hidden bg-gray-700 z-10"
+              className="absolute inset-0 m-auto w-44 h-52 mb-46 rounded-lg overflow-hidden bg-gray-700 z-10"
             >
               {/* counter-rotated wrapper*/}
               <motion.div
