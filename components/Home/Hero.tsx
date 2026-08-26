@@ -3,9 +3,19 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
-
+import Marquee from "@/components/ui/Marquee";
+import { skillRows } from "@/data/MarqueeData";
+import { DotColumnArtwork } from "@/components/ui/DotColumn";
 // end of the flip animation before it reaches the bottom
 const FLIP_END = 0.9;
+
+// scroll progress at which the heading finishes fading out
+const HEADING_FADE_END = 0.15;
+
+// scroll progress by which the dot column's whole separate/fade/hairline/
+// terminal sequence completes. well past HEADING_FADE_END so it keeps
+// playing for a couple more scroll-lengths after the heading itself is gone.
+const DOT_ARTWORK_END = 0.5;
 
 // below this viewport width, the flip is turned off entirely and the image
 // just sits at its starting size/rotation regardless of scroll.
@@ -48,7 +58,7 @@ export default function Hero() {
     clamp: true,
   });
 
-  // the flip itself. one linear turn, 0deg to 180deg, over flipProgress.
+  // the flip itself. 0deg to 180deg,
   const rotateY = useTransform(flipProgress, [0, 1], [0, 180]);
 
   // always the exact opposite of rotateY
@@ -59,7 +69,20 @@ export default function Hero() {
     ease: (t: number) => t * t,
   });
 
-  const headingOpacity = useTransform(scrollYProgress, [0, 0.15, 1], [1, 0, 0]);
+  const headingOpacity = useTransform(
+    scrollYProgress,
+    [0, HEADING_FADE_END, 1],
+    [1, 0, 0],
+  );
+
+  // 0..1 progress for the dot column artwork, based on the same
+  // scrollYProgress as the heading but stretched out over DOT_ARTWORK_END
+  const dotArtworkProgress = useTransform(
+    scrollYProgress,
+    [0, DOT_ARTWORK_END],
+    [0, 1],
+    { clamp: true },
+  );
 
   const mapRange = (
     value: number,
@@ -86,8 +109,11 @@ export default function Hero() {
   );
 
   return (
-    <section ref={trackRef} className="relative h-[150vh] pb-10">
-      <div className="sticky top-0 w-full max-w-[1280px] 3xl:max-w-[1350px] h-screen mx-auto flex flex-col justify-between">
+    <section ref={trackRef} className="relative h-[150vh] pb-2">
+      <div
+        className="sticky top-0 w-full max-w-[1280px] 3xl:max-w-[1350px] h-screen 
+        mx-auto flex flex-col justify-between"
+      >
         {/* heading layer */}
         <motion.div className="relative w-full h-[100vh] flex flex-col items-center pt-20 pb-5">
           <motion.h1
@@ -107,6 +133,13 @@ export default function Hero() {
             </span>
           </motion.h1>
 
+          <motion.p
+            style={{ opacity: headingOpacity }}
+            className="text-[16px] text-gray-600 font-[400px] pt-7"
+          >
+            The story is longer than this title suggests.
+          </motion.p>
+
           {/* hero image card */}
           <motion.div
             style={{
@@ -116,7 +149,7 @@ export default function Hero() {
               transformPerspective: 800,
               transformStyle: "preserve-3d", // preserves the inner counter
             }}
-            className="absolute bottom-40 m-auto w-44 h-52 rounded-lg overflow-hidden bg-gray-700 z-10"
+            className="mt-10 w-44 h-52 rounded-lg overflow-hidden bg-gray-700 z-10"
           >
             {/* counter-rotated wrapper*/}
             <motion.div
