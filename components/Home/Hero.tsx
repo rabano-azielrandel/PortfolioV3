@@ -21,6 +21,9 @@ const DOT_ARTWORK_END = 0.5;
 // just sits at its starting size/rotation regardless of scroll.
 const FLIP_MIN_WIDTH = 1180;
 
+// the image box's scale once the flip completes
+const IMAGE_FINAL_SCALE = 2.6;
+
 // tracks a min-width media query as a boolean. Starts `true` (assumes
 // desktop) since `window` doesn't exist yet on the server/first paint -
 // the effect corrects it to the real value as soon as it mounts.
@@ -45,7 +48,55 @@ function useIsDesktop(minWidth: number) {
 export default function Hero() {
   // element being tracked
   const trackRef = useRef<HTMLDivElement>(null);
+  // sticky container: the shared coordinate space both the image and the
+  // intro block are positioned within
+  const stickyRef = useRef<HTMLDivElement>(null);
+  // the image box that scales/rotates on scroll
+  const imageBoxRef = useRef<HTMLDivElement>(null);
+  // the intro block whose bottom edge the image should end up flush with
+  const introRef = useRef<HTMLDivElement>(null);
   const isDesktop = useIsDesktop(FLIP_MIN_WIDTH);
+
+  // vertical shift (px) applied to the image so that once it finishes
+  // scaling up, its bottom edge lands exactly on the intro block's bottom
+  // edge - measured live because the gap between the heading and the image
+  // (and so the image's natural resting position) varies a lot across
+  // breakpoints, while the intro block is independently pinned to the
+  // sticky container's bottom.
+  const [bottomCorrection, setBottomCorrection] = useState(0);
+
+  useEffect(() => {
+    function measure() {
+      const imageEl = imageBoxRef.current;
+      const stickyEl = stickyRef.current;
+      const introEl = introRef.current;
+      if (!imageEl || !stickyEl || !introEl) return;
+
+      // offsetTop/offsetHeight reflect normal-flow layout and are not
+      // affected by the scale/rotate transform already applied to imageEl,
+      // so this stays accurate no matter where scroll progress currently is
+      let offsetSum = 0;
+      let node: HTMLElement | null = imageEl;
+      while (node && node !== stickyEl) {
+        offsetSum += node.offsetTop;
+        node = node.offsetParent as HTMLElement | null;
+      }
+
+      const naturalHeight = imageEl.offsetHeight;
+      const stickyTop = stickyEl.getBoundingClientRect().top;
+      const naturalCenterY = stickyTop + offsetSum + naturalHeight / 2;
+      const naturalBottomAtFullScale =
+        naturalCenterY + (naturalHeight * IMAGE_FINAL_SCALE) / 2;
+
+      const targetBottom = introEl.getBoundingClientRect().bottom;
+
+      setBottomCorrection(targetBottom - naturalBottomAtFullScale);
+    }
+
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
 
   // live readout of where we are in the tracked element
   const { scrollYProgress } = useScroll({
@@ -64,8 +115,13 @@ export default function Hero() {
   // always the exact opposite of rotateY
   const counterRotateY = useTransform(rotateY, (v) => -v);
 
+  // ramps from 0 to bottomCorrection as the flip completes, so the image's
+  // bottom edge eases into alignment with the intro block right as the
+  // intro text fades in
+  const correctionY = useTransform(flipProgress, [0, 1], [0, bottomCorrection]);
+
   // for image box growth
-  const scale = useTransform(flipProgress, [0, 1], [1, 2.6], {
+  const scale = useTransform(flipProgress, [0, 1], [1, IMAGE_FINAL_SCALE], {
     ease: (t: number) => t * t,
   });
 
@@ -111,14 +167,15 @@ export default function Hero() {
   return (
     <section ref={trackRef} className="relative h-[150vh] pb-2">
       <div
-        className="sticky top-0 w-full max-w-[1280px] 3xl:max-w-[1350px] h-screen 
+        ref={stickyRef}
+        className="sticky top-0 w-full max-w-[1280px] 3xl:max-w-[1350px] h-screen
         mx-auto flex flex-col justify-between"
       >
         {/* heading layer */}
         <motion.div className="relative w-full h-[100vh] flex flex-col items-center pt-20 pb-5">
           <motion.h1
             style={{ opacity: headingOpacity }}
-            className="text-[46px] lg:text-[120px] 3xl:text-[12px] font-extrabold text-center 
+            className="text-[46px] lg:text-[120px] font-extrabold text-center
                 lg:leading-[1.10]"
           >
             FULL STACK
@@ -141,35 +198,42 @@ export default function Hero() {
           </motion.p>
 
           {/* hero image card */}
-          <motion.div
-            style={{
-              scale: isDesktop ? scale : 1,
-              rotateY: isDesktop ? rotateY : 0,
-              opacity: isDesktop ? 1 : headingOpacity,
-              transformPerspective: 800,
-              transformStyle: "preserve-3d", // preserves the inner counter
-            }}
-            className="mt-10 w-44 h-52 rounded-lg overflow-hidden bg-gray-700 z-10"
-          >
-            {/* counter-rotated wrapper*/}
+          {/* outer wrapper carries only the bottom-alignment correction, so
+              its translateY is always a raw screen-space shift, unaffected
+              by the scale/rotate applied to the box inside it */}
+          <motion.div style={{ y: isDesktop ? correctionY : 0 }}>
             <motion.div
-              style={{ rotateY: isDesktop ? counterRotateY : 0 }}
-              className="relative w-full h-full"
+              ref={imageBoxRef}
+              style={{
+                scale: isDesktop ? scale : 1,
+                rotateY: isDesktop ? rotateY : 0,
+                opacity: isDesktop ? 1 : headingOpacity,
+                transformPerspective: 800,
+                transformStyle: "preserve-3d", // preserves the inner counter
+              }}
+              className="mt-10 w-44 h-52 rounded-lg overflow-hidden bg-gray-700 z-10"
             >
-              <Image
-                src="/images/hero.png"
-                alt="hero"
-                fill
-                sizes="1"
-                className="object-cover"
-              />
+              {/* counter-rotated wrapper*/}
+              <motion.div
+                style={{ rotateY: isDesktop ? counterRotateY : 0 }}
+                className="relative w-full h-full"
+              >
+                <Image
+                  src="/images/hero.png"
+                  alt="hero"
+                  fill
+                  sizes="1"
+                  className="object-cover"
+                />
+              </motion.div>
             </motion.div>
           </motion.div>
         </motion.div>
 
         {/* intro*/}
         <div
-          className="absolute inset-x-0 bottom-0 h-132 flex flex-col lg:flex-row 
+          ref={introRef}
+          className="absolute inset-x-0 bottom-0 h-132 flex flex-col lg:flex-row
             justify-between items-center px-2 md:px-0 gap-8"
         >
           {/* left text */}
