@@ -1,6 +1,7 @@
 import Bot from "../ui/Bot";
 import Marquee from "@/components/ui/Marquee";
 import { skillRows } from "@/data/MarqueeData";
+import { identity } from "@/data/AboutData";
 
 export default function About() {
   return (
@@ -9,11 +10,11 @@ export default function About() {
         <Marquee rows={skillRows} className="py-2 bg-background" />
         <Bot
           title="WHO I AM"
-          paragraph="Six years of work, most of it built alone: point-of-sale for kiosks that had to survive a power cut, a ledger that reconciles itself, an atlas nobody asked for."
+          paragraph={identity}
           kicker="CORE · IDENTITY"
           background="#f2efec"
           ink="#141414"
-          height={700}
+          height={600}
         />
       </div>
     </section>

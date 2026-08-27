@@ -10,6 +10,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-archivo-sans);
   --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-lora);
   --breakpoint-3xl: 1920px;
   --breakpoint-4xl: 2560px;
 }

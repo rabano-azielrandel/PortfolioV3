@@ -10,11 +10,20 @@ import {
   useVelocity,
 } from "framer-motion";
 
+export type BotIdentity = {
+  /** Large intro line at the top of the back face. */
+  headline: string;
+  /** Body copy - one entry per column (stacked on mobile, side-by-side on desktop). */
+  columns: string[];
+  /** Closing italic line, right-aligned on desktop / left-aligned on mobile. */
+  quote: string;
+};
+
 export type BotProps = {
   /** Front face headline — sits above the droid. */
   title: string;
   /** Back face copy — revealed when the card flips. */
-  paragraph: string;
+  paragraph: BotIdentity;
   /** Band background colour. */
   background?: string;
   /** Line + type colour. */
@@ -39,6 +48,7 @@ export default function Bot({
   className = "",
 }: BotProps) {
   const card = useRef<HTMLDivElement | null>(null);
+  const paragraphRef = useRef<HTMLDivElement | null>(null);
   const [flipped, setFlipped] = useState(false);
   const [idle, setIdle] = useState(true);
   const [coarse, setCoarse] = useState(false);
@@ -122,6 +132,14 @@ export default function Bot({
       }
       const down = e.deltaY > 0;
       if (down === flipped) return;
+
+      // back face: let the paragraph scroll natively until it's already
+      // at the top - only then does continuing to scroll up flip the card
+      if (flipped && !down) {
+        const p = paragraphRef.current;
+        if (p && p.scrollTop > 0) return;
+      }
+
       acc += Math.abs(e.deltaY);
       e.preventDefault();
       if (acc > 60) {
@@ -137,6 +155,11 @@ export default function Bot({
   const onTap = useCallback(() => {
     if (coarse) setFlipped((f) => !f);
   }, [coarse]);
+
+  // start each view of the back face at the top of the paragraph
+  useEffect(() => {
+    if (paragraphRef.current) paragraphRef.current.scrollTop = 0;
+  }, [flipped]);
 
   const eyeStyle = { x: eyeX, y: eyeY };
   const lens = "rounded-full will-change-transform";
@@ -165,7 +188,7 @@ export default function Bot({
 
               <h2
                 style={{ color: ink }}
-                className="absolute inset-x-0 top-[74px] m-0 px-12 text-center font-sans text-[72px] font-bold leading-[0.94] tracking-[-0.028em] text-balance"
+                className="absolute inset-x-0 top-[74px] m-0 px-12 text-center font-sans text-[62px] lg:text-[72px] font-bold leading-[0.94] tracking-[-0.028em] text-balance"
               >
                 {title}
               </h2>
@@ -281,16 +304,43 @@ export default function Bot({
               </motion.div>
             </div>
 
-            {/* ---------------- back: paragraph ---------------- */}
-            <div className="absolute inset-0 flex items-center justify-center box-border px-24 py-[72px] [backface-visibility:hidden] [transform:rotateY(180deg)]">
-              <p
-                style={{ color: ink }}
-                className="m-0 max-w-[62ch] text-justify font-sans text-[19px] leading-[1.72] text-pretty"
-              >
-                {paragraph}
-              </p>
-              <div className={`absolute left-11 top-[30px] ${MONO}`}>
+            {/* ---------------- back: identity ---------------- */}
+            <div className="absolute inset-0 flex flex-col box-border [backface-visibility:hidden] [transform:rotateY(180deg)]">
+              <div className={`shrink-0 px-4 lg:px-11 pt-[30px] pb-3 ${MONO}`}>
                 {coarse ? "TAP TO RETURN" : "SCROLL UP TO RETURN"}
+              </div>
+
+              <div
+                ref={paragraphRef}
+                style={{ color: ink }}
+                className="flex-1 min-h-0 overflow-y-auto overscroll-y-contain px-4 lg:px-24 pb-[48px] font-serif"
+              >
+                <h3 className="text-[22px] lg:text-[30px] leading-[1.3] text-balance pt-10">
+                  {paragraph.headline}
+                </h3>
+
+                <div className="mt-6 border-t border-[#e0dad2]" />
+
+                <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-y-6">
+                  {paragraph.columns.map((col, i) => (
+                    <p
+                      key={i}
+                      className={`text-[14px] lg:text-[16px] leading-[1.75] text-pretty ${
+                        i > 0
+                          ? "lg:border-l lg:border-[#e0dad2] lg:pl-12"
+                          : "lg:pr-12"
+                      }`}
+                    >
+                      {col}
+                    </p>
+                  ))}
+                </div>
+
+                <div className="mt-8 border-t border-[#e0dad2]" />
+
+                <p className="mt-8 italic text-[14px] lg:text-[16px] leading-[1.75] text-pretty text-left lg:text-right opacity-60">
+                  {paragraph.quote}
+                </p>
               </div>
             </div>
           </motion.div>
@@ -338,7 +388,7 @@ export default function Bot({
                     }}
                   />
                 </span>
-                <span className={MONO}>SCROLL TO READ</span>
+                <span className={MONO}>HOVER AND SCROLL</span>
               </>
             )}
           </motion.div>
