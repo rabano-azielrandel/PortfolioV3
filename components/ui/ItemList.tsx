@@ -1,17 +1,93 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  AnimatePresence,
+} from "motion/react";
 import { ProjectList } from "@/types/ProjectTypes";
 
 interface Props {
   data: ProjectList;
 }
 
+function useIsDesktop() {
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const mql = window.matchMedia(
+      "(min-width: 1024px) and (hover: hover) and (pointer: fine)",
+    );
+    setIsDesktop(mql.matches);
+
+    const handleChange = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    mql.addEventListener("change", handleChange);
+    return () => mql.removeEventListener("change", handleChange);
+  }, []);
+
+  return isDesktop;
+}
+
+const NO_IMAGE_FALLBACK = "/images/no-image.png";
+
 export default function ItemList({ data }: Props) {
-  console.log(data);
+  const isDesktop = useIsDesktop();
+  const [hoveredImage, setHoveredImage] = useState<string | null>(null);
+
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const imageX = useSpring(mouseX, { stiffness: 150, damping: 20, mass: 0.5 });
+  const imageY = useSpring(mouseY, { stiffness: 150, damping: 20, mass: 0.5 });
+
+  function handleMouseMove(e: React.MouseEvent) {
+    if (!isDesktop) return;
+    mouseX.set(e.clientX);
+    mouseY.set(e.clientY);
+  }
+
   return (
-    <div className="w-full h-full py-4">
+    <div
+      className="w-full h-full py-4 cursor-pointer"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={() => setHoveredImage(null)}
+    >
+      {isDesktop && (
+        <AnimatePresence>
+          {hoveredImage && (
+            <motion.img
+              key={hoveredImage}
+              src={hoveredImage}
+              initial={{ opacity: 0, scale: 0.85 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.85 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+              style={{ x: imageX, y: imageY, translate: "40px -50%" }}
+              className="pointer-events-none fixed top-0 left-0 z-40 h-[220px] w-[300px] rounded-2xl object-cover shadow-xl"
+            />
+          )}
+        </AnimatePresence>
+      )}
+
       {data.projects.map((item, index) => (
-        <div
+        <motion.div
           key={index + item.projectName}
+          onMouseEnter={() =>
+            isDesktop &&
+            setHoveredImage(item.projectImage?.url ?? NO_IMAGE_FALLBACK)
+          }
+          onMouseLeave={() => setHoveredImage(null)}
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.3 }}
+          transition={{
+            type: "spring",
+            stiffness: 300,
+            damping: 22,
+            mass: 0.6,
+          }}
           className="flex flex-col lg:flex-row gap-4 lg:gap-0 lg:justify-between py-10 border-b border-[#DED8D0]"
         >
           <div className="flex flex-col">
@@ -42,7 +118,7 @@ export default function ItemList({ data }: Props) {
               {item.liveSite ?? "Internal only "}
             </Link>
           </div>
-        </div>
+        </motion.div>
       ))}
     </div>
   );
