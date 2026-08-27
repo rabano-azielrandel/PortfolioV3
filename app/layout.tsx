@@ -29,7 +29,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistMono.variable} ${archivo.variable} ${lora.variable} h-full antialiased`}
+      className={`${geistMono.variable} ${archivo.variable} ${lora.variable} h-full scroll-smooth antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <CustomCursor />

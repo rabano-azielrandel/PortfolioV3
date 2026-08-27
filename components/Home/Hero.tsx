@@ -165,7 +165,7 @@ export default function Hero() {
   );
 
   return (
-    <section ref={trackRef} className="relative h-[150vh] pb-2">
+    <section ref={trackRef} id="HOME" className="relative h-[150vh] pb-2">
       <div
         ref={stickyRef}
         className="sticky top-0 w-full max-w-[1280px] 3xl:max-w-[1350px] h-screen

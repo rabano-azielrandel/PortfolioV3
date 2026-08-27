@@ -5,7 +5,7 @@ import { identity } from "@/data/AboutData";
 
 export default function About() {
   return (
-    <section className="w-full h-full py-10">
+    <section id="ABOUT" className="w-full h-full py-10">
       <div className="w-full max-w-full h-full mx-auto flex flex-col gap-5">
         <Marquee rows={skillRows} className="py-2 bg-background" />
         <Bot

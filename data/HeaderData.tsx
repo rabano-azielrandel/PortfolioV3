@@ -1,7 +1,12 @@
 export const navs = [
-  { name: "HOME", route: "/", path: "/icons/home.png" },
-  { name: "PROJECTS", route: "/", path: "/icons/projects.png" },
-  { name: "EXPERIENCE", route: "/", path: "/icons/experience2.png" },
-  { name: "HOBBIES", route: "/", path: "/icons/hobbies.png" },
-  { name: "CONTACTS", route: "/", path: "/icons/contacts.png" },
+  { name: "HOME", sectionId: "HOME", path: "/icons/home.png" },
+  { name: "ABOUT", sectionId: "ABOUT", path: "/icons/about3.png" },
+  { name: "PROJECTS", sectionId: "PROJECTS", path: "/icons/projects.png" },
+  {
+    name: "EXPERIENCE",
+    sectionId: "EXPERIENCE",
+    path: "/icons/experience2.png",
+  },
+  { name: "HOBBIES", sectionId: "HOBBIES", path: "/icons/hobbies.png" },
+  { name: "CONTACTS", sectionId: "CONTACTS", path: "/icons/contacts.png" },
 ];
