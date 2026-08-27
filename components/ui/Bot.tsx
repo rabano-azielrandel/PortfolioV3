@@ -186,122 +186,124 @@ export default function Bot({
                 </div>
               ) : null}
 
-              <h2
-                style={{ color: ink }}
-                className="absolute inset-x-0 top-[74px] m-0 px-12 text-center font-sans text-[62px] lg:text-[72px] font-bold leading-[0.94] tracking-[-0.028em] text-balance"
-              >
-                {title}
-              </h2>
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-10">
+                <h2
+                  style={{ color: ink }}
+                  className="m-0 px-12 text-center font-sans text-[62px] lg:text-[72px] font-bold leading-[0.94] tracking-[-0.028em] text-balance"
+                >
+                  {title}
+                </h2>
 
-              <motion.div
-                style={{ x }}
-                className="absolute bottom-[85px] left-1/2 -ml-[70px] w-[140px] will-change-transform"
-              >
-                <div className="absolute -bottom-1.5 left-[22px] h-[11px] w-24 rounded-full bg-[radial-gradient(50%_50%,rgba(20,20,20,.24),rgba(20,20,20,0)_70%)]" />
-                <div className="relative h-[150px]">
-                  {/* body — spin derived from distance travelled */}
-                  <motion.div
-                    style={{ rotate: roll, borderColor: ink, background }}
-                    className="absolute bottom-0 left-[22px] h-24 w-24 rounded-full border-[1.5px] will-change-transform"
-                  >
-                    <div
-                      style={{ borderColor: ink }}
-                      className="absolute left-3 top-[30px] h-[34px] w-[34px] rounded-full border-[1.5px]"
-                    />
-                    <div
-                      style={{ borderColor: ink }}
-                      className="absolute left-[22px] top-10 h-[14px] w-[14px] rounded-full border"
-                    />
-                    <div
-                      style={{ borderColor: ink }}
-                      className="absolute right-2 top-[14px] h-[22px] w-[22px] rounded-full border-[1.5px]"
-                    />
-                    <div
-                      style={{ borderColor: ink }}
-                      className="absolute bottom-2.5 left-10 h-4 w-4 rounded-full border-[1.5px]"
-                    />
-                    <div
-                      style={{ background: ink }}
-                      className="absolute left-[46px] top-1 h-[22px] w-px"
-                    />
-                    <div
-                      style={{ background: ink }}
-                      className="absolute bottom-[26px] right-3 h-px w-5"
-                    />
-                  </motion.div>
+                <motion.div
+                  style={{ x }}
+                  className="relative w-[140px] will-change-transform"
+                >
+                  <div className="absolute -bottom-1.5 left-[22px] h-[11px] w-24 rounded-full bg-[radial-gradient(50%_50%,rgba(20,20,20,.24),rgba(20,20,20,0)_70%)]" />
+                  <div className="relative h-[150px]">
+                    {/* body — spin derived from distance travelled */}
+                    <motion.div
+                      style={{ rotate: roll, borderColor: ink, background }}
+                      className="absolute bottom-0 left-[22px] h-24 w-24 rounded-full border-[1.5px] will-change-transform"
+                    >
+                      <div
+                        style={{ borderColor: ink }}
+                        className="absolute left-3 top-[30px] h-[34px] w-[34px] rounded-full border-[1.5px]"
+                      />
+                      <div
+                        style={{ borderColor: ink }}
+                        className="absolute left-[22px] top-10 h-[14px] w-[14px] rounded-full border"
+                      />
+                      <div
+                        style={{ borderColor: ink }}
+                        className="absolute right-2 top-[14px] h-[22px] w-[22px] rounded-full border-[1.5px]"
+                      />
+                      <div
+                        style={{ borderColor: ink }}
+                        className="absolute bottom-2.5 left-10 h-4 w-4 rounded-full border-[1.5px]"
+                      />
+                      <div
+                        style={{ background: ink }}
+                        className="absolute left-[46px] top-1 h-[22px] w-px"
+                      />
+                      <div
+                        style={{ background: ink }}
+                        className="absolute bottom-[26px] right-3 h-px w-5"
+                      />
+                    </motion.div>
 
-                  {/* dome — stays upright, leads the turn */}
-                  <motion.div
-                    style={{
-                      x: lead,
-                      rotate: tilt,
-                      transformOrigin: "50% 160%",
-                    }}
-                    className="absolute bottom-[88px] left-9 h-10 w-[68px] will-change-transform"
-                  >
-                    <div
-                      style={{ background: ink }}
-                      className="absolute inset-0 rounded-t-[34px] rounded-b-[3px]"
-                    />
-                    <div
-                      style={{ background, borderColor: ink }}
-                      className="absolute -left-[3px] bottom-0 box-border h-[3px] w-[74px] border-y"
-                    />
-                    <div
-                      style={{ background: ink }}
-                      className="absolute left-[26px] -top-[26px] h-[26px] w-px"
-                    />
-                    <div
-                      style={{ background: ink }}
-                      className="absolute left-[38px] -top-4 h-4 w-px rotate-[8deg]"
-                    />
-                    <div className="absolute left-3 top-3 h-[18px] w-[46px] overflow-hidden">
-                      <div className="absolute inset-0 flex items-center gap-2">
+                    {/* dome — stays upright, leads the turn */}
+                    <motion.div
+                      style={{
+                        x: lead,
+                        rotate: tilt,
+                        transformOrigin: "50% 160%",
+                      }}
+                      className="absolute bottom-[88px] left-9 h-10 w-[68px] will-change-transform"
+                    >
+                      <div
+                        style={{ background: ink }}
+                        className="absolute inset-0 rounded-t-[34px] rounded-b-[3px]"
+                      />
+                      <div
+                        style={{ background, borderColor: ink }}
+                        className="absolute -left-[3px] bottom-0 box-border h-[3px] w-[74px] border-y"
+                      />
+                      <div
+                        style={{ background: ink }}
+                        className="absolute left-[26px] -top-[26px] h-[26px] w-px"
+                      />
+                      <div
+                        style={{ background: ink }}
+                        className="absolute left-[38px] -top-4 h-4 w-px rotate-[8deg]"
+                      />
+                      <div className="absolute left-3 top-3 h-[18px] w-[46px] overflow-hidden">
+                        <div className="absolute inset-0 flex items-center gap-2">
+                          <motion.div
+                            style={{
+                              ...eyeStyle,
+                              background,
+                              boxShadow: `inset 0 0 0 4px ${ink}`,
+                            }}
+                            animate={{ scaleY: idle ? 0.16 : 1 }}
+                            transition={{ duration: 0.35 }}
+                            className={`h-[18px] w-[18px] ${lens}`}
+                          />
+                          <motion.div
+                            style={{
+                              ...eyeStyle,
+                              background,
+                              boxShadow: `inset 0 0 0 2.5px ${ink}`,
+                            }}
+                            animate={{ scaleY: idle ? 0.16 : 1 }}
+                            transition={{ duration: 0.35 }}
+                            className={`h-2.5 w-2.5 ${lens}`}
+                          />
+                        </div>
+                        {/* blink */}
                         <motion.div
-                          style={{
-                            ...eyeStyle,
-                            background,
-                            boxShadow: `inset 0 0 0 4px ${ink}`,
+                          style={{ background: ink, transformOrigin: "50% 0" }}
+                          className="absolute inset-0"
+                          animate={{ scaleY: [0, 0, 1, 0] }}
+                          transition={{
+                            duration: 7.8,
+                            times: [0, 0.955, 0.974, 0.99],
+                            repeat: Infinity,
+                            ease: "linear",
                           }}
-                          animate={{ scaleY: idle ? 0.16 : 1 }}
-                          transition={{ duration: 0.35 }}
-                          className={`h-[18px] w-[18px] ${lens}`}
-                        />
-                        <motion.div
-                          style={{
-                            ...eyeStyle,
-                            background,
-                            boxShadow: `inset 0 0 0 2.5px ${ink}`,
-                          }}
-                          animate={{ scaleY: idle ? 0.16 : 1 }}
-                          transition={{ duration: 0.35 }}
-                          className={`h-2.5 w-2.5 ${lens}`}
                         />
                       </div>
-                      {/* blink */}
-                      <motion.div
-                        style={{ background: ink, transformOrigin: "50% 0" }}
-                        className="absolute inset-0"
-                        animate={{ scaleY: [0, 0, 1, 0] }}
-                        transition={{
-                          duration: 7.8,
-                          times: [0, 0.955, 0.974, 0.99],
-                          repeat: Infinity,
-                          ease: "linear",
-                        }}
-                      />
-                    </div>
-                  </motion.div>
-                </div>
-              </motion.div>
+                    </motion.div>
+                  </div>
+                </motion.div>
 
-              <motion.div
-                className={`absolute inset-x-0 bottom-14 text-center ${MONO}`}
-                animate={{ opacity: idle ? 1 : 0 }}
-                transition={{ duration: 0.4 }}
-              >
-                STANDBY
-              </motion.div>
+                <motion.div
+                  className={`text-center ${MONO}`}
+                  animate={{ opacity: idle ? 1 : 0 }}
+                  transition={{ duration: 0.4 }}
+                >
+                  STANDBY
+                </motion.div>
+              </div>
             </div>
 
             {/* ---------------- back: identity ---------------- */}
