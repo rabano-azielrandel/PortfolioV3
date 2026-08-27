@@ -4,6 +4,7 @@ import "./globals.css";
 
 import Header from "@/components/ui/Header";
 import CustomCursor from "@/components/ui/CustomCursor";
+import SmoothScroll from "@/components/ui/SmoothScroll";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -29,12 +30,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistMono.variable} ${archivo.variable} ${lora.variable} h-full scroll-smooth antialiased`}
+      className={`${geistMono.variable} ${archivo.variable} ${lora.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <CustomCursor />
-        <Header />
-        {children}
+        <SmoothScroll>
+          <CustomCursor />
+          <Header />
+          {children}
+        </SmoothScroll>
       </body>
     </html>
   );
