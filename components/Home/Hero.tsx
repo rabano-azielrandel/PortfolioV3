@@ -3,66 +3,19 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
-import Marquee from "@/components/ui/Marquee";
-import { skillRows } from "@/data/MarqueeData";
-import { DotColumnArtwork } from "@/components/ui/DotColumn";
-// end of the flip animation before it reaches the bottom
+import { useMediaQuery } from "@/helpers/useMediaQuery";
+
 const FLIP_END = 0.9;
-
-// scroll progress at which the heading finishes fading out
 const HEADING_FADE_END = 0.15;
-
-// scroll progress by which the dot column's whole separate/fade/hairline/
-// terminal sequence completes. well past HEADING_FADE_END so it keeps
-// playing for a couple more scroll-lengths after the heading itself is gone.
-const DOT_ARTWORK_END = 0.5;
-
-// below this viewport width, the flip is turned off entirely and the image
-// just sits at its starting size/rotation regardless of scroll.
 const FLIP_MIN_WIDTH = 1180;
-
-// the image box's scale once the flip completes
 const IMAGE_FINAL_SCALE = 2.6;
 
-// tracks a min-width media query as a boolean. Starts `true` (assumes
-// desktop) since `window` doesn't exist yet on the server/first paint -
-// the effect corrects it to the real value as soon as it mounts.
-function useIsDesktop(minWidth: number) {
-  const [isDesktop, setIsDesktop] = useState(true);
-
-  useEffect(() => {
-    const query = window.matchMedia(`(min-width: ${minWidth}px)`);
-    setIsDesktop(query.matches);
-
-    function onChange(event: MediaQueryListEvent) {
-      setIsDesktop(event.matches);
-    }
-
-    query.addEventListener("change", onChange);
-    return () => query.removeEventListener("change", onChange);
-  }, [minWidth]);
-
-  return isDesktop;
-}
-
 export default function Hero() {
-  // element being tracked
   const trackRef = useRef<HTMLDivElement>(null);
-  // sticky container: the shared coordinate space both the image and the
-  // intro block are positioned within
   const stickyRef = useRef<HTMLDivElement>(null);
-  // the image box that scales/rotates on scroll
   const imageBoxRef = useRef<HTMLDivElement>(null);
-  // the intro block whose bottom edge the image should end up flush with
   const introRef = useRef<HTMLDivElement>(null);
-  const isDesktop = useIsDesktop(FLIP_MIN_WIDTH);
-
-  // vertical shift (px) applied to the image so that once it finishes
-  // scaling up, its bottom edge lands exactly on the intro block's bottom
-  // edge - measured live because the gap between the heading and the image
-  // (and so the image's natural resting position) varies a lot across
-  // breakpoints, while the intro block is independently pinned to the
-  // sticky container's bottom.
+  const isDesktop = useMediaQuery(`(min-width: ${FLIP_MIN_WIDTH}px)`, true);
   const [bottomCorrection, setBottomCorrection] = useState(0);
 
   useEffect(() => {
@@ -72,9 +25,6 @@ export default function Hero() {
       const introEl = introRef.current;
       if (!imageEl || !stickyEl || !introEl) return;
 
-      // offsetTop/offsetHeight reflect normal-flow layout and are not
-      // affected by the scale/rotate transform already applied to imageEl,
-      // so this stays accurate no matter where scroll progress currently is
       let offsetSum = 0;
       let node: HTMLElement | null = imageEl;
       while (node && node !== stickyEl) {
@@ -98,29 +48,19 @@ export default function Hero() {
     return () => window.removeEventListener("resize", measure);
   }, []);
 
-  // live readout of where we are in the tracked element
   const { scrollYProgress } = useScroll({
     target: trackRef,
     offset: ["start start", "end end"],
   });
 
-  // ratio/rescale also responsible for ending the flip
   const flipProgress = useTransform(scrollYProgress, [0, FLIP_END], [0, 1], {
     clamp: true,
   });
 
-  // the flip itself. 0deg to 180deg,
   const rotateY = useTransform(flipProgress, [0, 1], [0, 180]);
-
-  // always the exact opposite of rotateY
   const counterRotateY = useTransform(rotateY, (v) => -v);
-
-  // ramps from 0 to bottomCorrection as the flip completes, so the image's
-  // bottom edge eases into alignment with the intro block right as the
-  // intro text fades in
   const correctionY = useTransform(flipProgress, [0, 1], [0, bottomCorrection]);
 
-  // for image box growth
   const scale = useTransform(flipProgress, [0, 1], [1, IMAGE_FINAL_SCALE], {
     ease: (t: number) => t * t,
   });
@@ -129,15 +69,6 @@ export default function Hero() {
     scrollYProgress,
     [0, HEADING_FADE_END, 1],
     [1, 0, 0],
-  );
-
-  // 0..1 progress for the dot column artwork, based on the same
-  // scrollYProgress as the heading but stretched out over DOT_ARTWORK_END
-  const dotArtworkProgress = useTransform(
-    scrollYProgress,
-    [0, DOT_ARTWORK_END],
-    [0, 1],
-    { clamp: true },
   );
 
   const mapRange = (

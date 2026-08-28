@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import {
   motion,
@@ -9,32 +9,19 @@ import {
   AnimatePresence,
 } from "motion/react";
 import { ProjectList } from "@/types/ProjectTypes";
+import { useMediaQuery } from "@/helpers/useMediaQuery";
 
 interface Props {
   data: ProjectList;
 }
 
-function useIsDesktop() {
-  const [isDesktop, setIsDesktop] = useState(false);
-
-  useEffect(() => {
-    const mql = window.matchMedia(
-      "(min-width: 1024px) and (hover: hover) and (pointer: fine)",
-    );
-    setIsDesktop(mql.matches);
-
-    const handleChange = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
-    mql.addEventListener("change", handleChange);
-    return () => mql.removeEventListener("change", handleChange);
-  }, []);
-
-  return isDesktop;
-}
-
 const NO_IMAGE_FALLBACK = "/images/no-image.png";
 
 export default function ItemList({ data }: Props) {
-  const isDesktop = useIsDesktop();
+  const isDesktop = useMediaQuery(
+    "(min-width: 1024px) and (hover: hover) and (pointer: fine)",
+    false,
+  );
   const [hoveredImage, setHoveredImage] = useState<string | null>(null);
 
   const mouseX = useMotionValue(0);
