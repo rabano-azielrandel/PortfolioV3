@@ -8,14 +8,12 @@ import {
   useSpring,
   AnimatePresence,
 } from "motion/react";
-import { ProjectList } from "@/types/ProjectTypes";
+import { ProcessedProjectList } from "@/types/ProjectTypes";
 import { useMediaQuery } from "@/helpers/useMediaQuery";
 
 interface Props {
-  data: ProjectList;
+  data: ProcessedProjectList;
 }
-
-const NO_IMAGE_FALLBACK = "/images/no-image.png";
 
 export default function ItemList({ data }: Props) {
   const isDesktop = useMediaQuery(
@@ -62,8 +60,7 @@ export default function ItemList({ data }: Props) {
         <motion.div
           key={index + item.projectName}
           onMouseEnter={() =>
-            isDesktop &&
-            setHoveredImage(item.projectImage?.url ?? NO_IMAGE_FALLBACK)
+            isDesktop && setHoveredImage(item.projectImage)
           }
           onMouseLeave={() => setHoveredImage(null)}
           initial={{ opacity: 0, y: 40 }}
@@ -83,7 +80,7 @@ export default function ItemList({ data }: Props) {
             </h3>
 
             <p
-              dangerouslySetInnerHTML={{ __html: item.projectDescription.html }}
+              dangerouslySetInnerHTML={{ __html: item.projectDescription }}
               className="mt-3 mb-0 max-w-[64ch] font-serif text-[15px] leading-[1.65] text-[#4a4844] text-pretty"
             />
 

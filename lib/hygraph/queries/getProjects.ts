@@ -1,6 +1,6 @@
 import { gql } from "graphql-request";
 import { hygraphClient } from "@/lib/hygraph/client";
-import { ProjectList } from "@/types/ProjectTypes";
+import { GetProjectsResponse, ProcessedProjectList } from "@/types/ProjectTypes";
 
 const GET_PROJECTS_QUERY = gql`
   query GetProjects($slug: String!) {
@@ -26,15 +26,41 @@ const GET_PROJECTS_QUERY = gql`
   }
 `;
 
-interface GetProjectsResponse {
-  projectList: ProjectList | null;
+interface GetProjectsVariables {
+  slug: string;
 }
 
-export async function getProjects(slug: string) {
-  const data = await hygraphClient.request<GetProjectsResponse>(
-    GET_PROJECTS_QUERY,
-    { slug }
-  );
+const NO_IMAGE_FALLBACK = "/images/no-image.png";
 
-  return data.projectList;
+export async function getProjects(
+  slug: string,
+): Promise<ProcessedProjectList | null> {
+  try {
+    const data = await hygraphClient.request<
+      GetProjectsResponse,
+      GetProjectsVariables
+    >(GET_PROJECTS_QUERY, { slug });
+
+    const projectList = data.projectList;
+    if (!projectList) return null;
+
+    const processedData: ProcessedProjectList = {
+      kicker: projectList.kicker ?? "",
+      displayHeading: projectList.displayHeading ?? "",
+      serifDeck: projectList.serifDeck?.html ?? "",
+      projects: projectList.projects.map((project) => ({
+        projectName: project.projectName,
+        projectDescription: project.projectDescription?.html ?? "",
+        techStacks: project.techStacks ?? [],
+        githubLink: project.githubLink,
+        liveSite: project.liveSite,
+        projectImage: project.projectImage?.url ?? NO_IMAGE_FALLBACK,
+      })),
+    };
+
+    return processedData;
+  } catch (error) {
+    console.error("Hygraph Fetch Error:", error);
+    throw new Error(`Failed to fetch data: ${error}`);
+  }
 }

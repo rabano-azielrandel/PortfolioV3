@@ -2,7 +2,7 @@
 
 import ItemList from "../ui/ItemList";
 import { getProjects } from "@/lib/hygraph/queries/getProjects";
-import { ProjectList } from "@/types/ProjectTypes";
+import { ProcessedProjectList } from "@/types/ProjectTypes";
 
 export default async function Projects() {
   const professional = await getProjects("professional");
@@ -33,13 +33,13 @@ export default async function Projects() {
               {/* serif deck */}
               <p
                 dangerouslySetInnerHTML={{
-                  __html: data?.serifDeck.html ?? "",
+                  __html: data?.serifDeck ?? "",
                 }}
                 className="mt-5 w-full max-w-[800px] font-serif text-[16px] leading-[1.6] text-[#4a4844] text-pretty"
               />
             </div>
             {/* projects */}
-            <ItemList data={data as ProjectList} />
+            <ItemList data={data as ProcessedProjectList} />
           </div>
         ))}
       </div>
