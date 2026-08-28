@@ -79,7 +79,7 @@ export default function ItemList({ data }: Props) {
               {item.projectName}
             </h3>
 
-            <p
+            <div
               dangerouslySetInnerHTML={{ __html: item.projectDescription }}
               className="mt-3 mb-0 max-w-[64ch] font-serif text-[15px] leading-[1.65] text-[#4a4844] text-pretty"
             />

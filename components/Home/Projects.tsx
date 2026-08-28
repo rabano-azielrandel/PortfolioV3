@@ -31,7 +31,7 @@ export default async function Projects() {
               />
 
               {/* serif deck */}
-              <p
+              <div
                 dangerouslySetInnerHTML={{
                   __html: data?.serifDeck ?? "",
                 }}
