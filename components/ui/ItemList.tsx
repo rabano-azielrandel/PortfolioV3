@@ -59,9 +59,7 @@ export default function ItemList({ data }: Props) {
       {data.projects.map((item, index) => (
         <motion.div
           key={index + item.projectName}
-          onMouseEnter={() =>
-            isDesktop && setHoveredImage(item.projectImage)
-          }
+          onMouseEnter={() => isDesktop && setHoveredImage(item.projectImage)}
           onMouseLeave={() => setHoveredImage(null)}
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -98,8 +96,30 @@ export default function ItemList({ data }: Props) {
           <div
             className={`${item.liveSite ?? "text-[#c4bfb6]"} flex items-center text-[14px] font-light`}
           >
-            <Link href={item.liveSite ?? "/"}>
-              {item.liveSite ?? "Internal only "}
+            <Link
+              href={item.liveSite ?? "/"}
+              className="flex items-center gap-1"
+            >
+              {item.liveSite != null ? (
+                <>
+                  View
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M7 17L17 7" />
+                    <path d="M7 7h10v10" />
+                  </svg>
+                </>
+              ) : (
+                "Internal only"
+              )}
             </Link>
           </div>
         </motion.div>
