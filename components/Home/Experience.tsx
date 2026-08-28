@@ -7,6 +7,7 @@ import {
   useMotionValueEvent,
   useScroll,
   useTransform,
+  type MotionValue,
 } from "motion/react";
 import { experienceIntro, experienceItems } from "@/data/ExperienceData";
 
@@ -30,28 +31,57 @@ const OUTRO_VH = 40;
 // between the leading/trailing spacer and its neighboring tile, so it has
 // to be subtracted from the spacer width or the end tiles land off-center
 const GALLERY_GAP_PX = 80;
+// "train window" parallax on the desktop gallery tiles: the image is
+// rendered wider than its own container (overflow hidden, anchored to the
+// left edge instead of centered) and pans further left as the gallery
+// scrolls, so the window (container) travels with the track while the
+// image behind it drifts - IMAGE_PAN_END is kept just under
+// (IMAGE_OVERFLOW_PERCENT / (1 + IMAGE_OVERFLOW_PERCENT/100)) so the pan
+// never runs past the image's right edge and exposes empty space
+const IMAGE_OVERFLOW_PERCENT = 130; // rendered image width, as % of the container
+const IMAGE_PAN_END = "-22%"; // translateX at the end of the scroll, as % of the image's own (wider) width
 
 function ExperienceCard({
   item,
   className = "",
   imageClassName = "",
+  parallaxX,
 }: {
   item: ExperienceItem;
   className?: string;
   imageClassName?: string;
+  /** desktop gallery only - shared scroll-linked pan applied to the (wider,
+   * left-anchored) image inside its overflow-hidden container. Omitted for
+   * mobile cards, which render a plain centered `object-cover` image. */
+  parallaxX?: MotionValue<string>;
 }) {
   return (
     <div className={`flex flex-col gap-4 ${className}`}>
       <div
         className={`relative overflow-hidden rounded-2xl bg-[#e5e0d8] ${imageClassName}`}
       >
-        <Image
-          src={item.image}
-          alt={item.title}
-          fill
-          sizes="(min-width: 1180px) 60vw, 85vw"
-          className="object-cover"
-        />
+        {parallaxX ? (
+          <motion.div
+            style={{ x: parallaxX, width: `${IMAGE_OVERFLOW_PERCENT}%` }}
+            className="absolute inset-y-0 left-0"
+          >
+            <Image
+              src={item.image}
+              alt={item.title}
+              fill
+              sizes="(min-width: 1180px) 78vw, 110vw"
+              className="object-cover object-left"
+            />
+          </motion.div>
+        ) : (
+          <Image
+            src={item.image}
+            alt={item.title}
+            fill
+            sizes="(min-width: 1180px) 60vw, 85vw"
+            className="object-cover"
+          />
+        )}
       </div>
       <div className="flex flex-col gap-1">
         <span className="font-mono text-xs tracking-[0.2em] text-[#8d8579]">
@@ -128,6 +158,16 @@ export default function Experience() {
   useMotionValueEvent(rawIndex, "change", (v) => {
     setActiveIndex(Math.round(v));
   });
+
+  // shared by every gallery tile - the window (container) travels with the
+  // track at full speed, while this pans the image behind it more slowly
+  // over the same scroll range, same "train window" drift for every tile
+  const imagePan = useTransform(
+    scrollYProgress,
+    [INTRO_END, OUTRO_START],
+    ["0%", IMAGE_PAN_END],
+    { clamp: true },
+  );
 
   useEffect(() => {
     const trackEl = trackRef.current;
@@ -220,6 +260,7 @@ export default function Experience() {
                   item={item}
                   className="w-[min(60vw,760px)]"
                   imageClassName="h-[60vh]"
+                  parallaxX={imagePan}
                 />
               </div>
             ))}
