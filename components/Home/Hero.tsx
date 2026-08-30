@@ -198,7 +198,7 @@ export default function Hero() {
               turn an idea into something people can actually use.
             </p>
 
-            <a href="#" className="group flex items-center gap-4">
+            <a href="#ABOUT" className="group flex items-center gap-4">
               Get Started
               <span className="group relative w-7 h-7 flex justify-center items-center rounded-xl border border-black overflow-hidden">
                 {/* fill layer */}

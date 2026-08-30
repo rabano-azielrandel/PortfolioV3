@@ -86,7 +86,7 @@ export default function ItemList({ data }: Props) {
               {item.techStacks.map((tech, i) => (
                 <span
                   key={i + tech}
-                  className="rounded-full text-[10px] text-[#8d8579] uppercase tracking-[0.12em]"
+                  className="rounded-full font-mono text-[10px] text-[#8d8579] uppercase tracking-[0.12em]"
                 >
                   {tech}
                 </span>
@@ -98,7 +98,7 @@ export default function ItemList({ data }: Props) {
           >
             <Link
               href={item.liveSite ?? "/"}
-              className="flex items-center gap-1"
+              className="flex items-center gap-1 font-mono"
             >
               {item.liveSite != null ? (
                 <>
