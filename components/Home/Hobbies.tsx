@@ -1,11 +1,15 @@
-import { section } from "motion/react-client";
-import React from "react";
+import { Bento } from "@/components/ui/Bento";
+import { hobbies } from "@/data/HobbiesData";
 
 export default function Hobbies() {
   return (
-    <section className="w-full h-full">
-      <div className="w-full lg:max-w-[1280px] 3xl:max-w-[1350px] mx-auto bg-amber-500">
-        hello
+    <section id="HOBBIES" className="w-full h-full py-10">
+      <div className="w-full max-w-[1280px] 3xl:max-w-[1350px] mx-auto px-4">
+        <Bento
+          data={hobbies}
+          heading="Hobbies"
+          subheading="A few rooms I keep coming back to."
+        />
       </div>
     </section>
   );

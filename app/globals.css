@@ -44,3 +44,14 @@ body.custom-cursor-active .cursor-pointer {
     transform: translateX(calc(-1 * var(--marquee-distance, 0px)));
   }
 }
+
+@keyframes hb-in {
+  from {
+    opacity: 0;
+    transform: scale(0.965);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
