@@ -8,10 +8,20 @@ export const hobbies: BentoCategory[] = [
     cover: "/images/hobby/anime.png",
     cover2: "/images/hobby/anime-cover.png",
     description: "Stories That Echo.",
+    filler: [
+      {
+        image: "/images/hobby/anime-filler2.png",
+        position: "object-[50%_50%] object-cover",
+      },
+      {
+        image: "/images/hobby/anime-filler1.png",
+        position: "object-[50%_11%] object-cover",
+      },
+    ],
     entries: [
       {
         title: "Sakamoto Days",
-        image: "/images/hobby/anime1.jpg",
+        image: "/images/hobby/anime1.png",
         position: "object-[50%_30%]",
         icon: "play",
         rating: "8.6",
@@ -21,7 +31,7 @@ export const hobbies: BentoCategory[] = [
         title: "Chainsaw Man",
         icon: "book",
         position: "object-[50%_16%]",
-        image: "/images/hobby/anime2.jpg",
+        image: "/images/hobby/anime2.png",
         rating: "9.4",
         description: "Wild, stylish, and unpredictable.",
       },
@@ -29,7 +39,7 @@ export const hobbies: BentoCategory[] = [
         title: "Demon Slayer",
         icon: "film",
         position: "object-[50%_20%]",
-        image: "/images/hobby/anime3.jpg",
+        image: "/images/hobby/anime3.png",
         rating: "9.0",
         meta: "Shonen · 2019",
         description: "Elegan fights with cinematic flair.",
@@ -38,7 +48,7 @@ export const hobbies: BentoCategory[] = [
         title: "Jujutsu Kaisen",
         icon: "fire",
         position: "object-[50%_14%]",
-        image: "/images/hobby/anime4.jpg",
+        image: "/images/hobby/anime4.png",
         rating: "8.9",
         meta: "Dark fantasy · 2020",
         description: "Dark energy with hype battles.",
@@ -50,36 +60,46 @@ export const hobbies: BentoCategory[] = [
     label: "Music",
     icon: "music",
     cover: "/images/hobby/music.png",
-    cover2: "/images/hobby/music-cover.jpg",
+    cover2: "/images/hobby/music-cover.png",
     description: "Sounds That Burn.",
+    filler: [
+      {
+        position: "object-[50%_60%] object-cover",
+        image: "/images/hobby/music-filler1.png",
+      },
+      {
+        position: "object-[50%_32%] object-cover",
+        image: "/images/hobby/music-filler2.png",
+      },
+    ],
     entries: [
       {
         title: "IV OF SPADES",
-        image: "/images/hobby/music1.jpg",
-        position: "object-[50%_30%]",
+        image: "/images/hobby/music1.png",
+        position: "object-[50%_20%]",
         icon: "disc",
         rating: "9.5",
         description: "Retro grooves with sharp style.",
       },
       {
+        title: "TWENTY ONE PILOTS",
+        image: "/images/hobby/music2.png",
+        position: "object-[50%_60%]",
+        icon: "music",
+        rating: "9.2",
+        description: "Deep lyrics with modern edge.",
+      },
+      {
         title: "IU",
-        image: "/images/hobby/music4.jpg",
+        image: "/images/hobby/music4.png",
         position: "object-[50%_30%]",
         icon: "mic",
         rating: "9.0",
         description: "Soft melodies with pure emotion.",
       },
       {
-        title: "TWENTY ONE PILOTS",
-        image: "/images/hobby/music2.jpg",
-        position: "object-[50%_40%]",
-        icon: "music",
-        rating: "9.2",
-        description: "Deep lyrics with modern edge.",
-      },
-      {
         title: "SABRINA",
-        image: "/images/hobby/music3.jpg",
+        image: "/images/hobby/music3.png",
         position: "object-[50%_34%]",
         icon: "headphones",
         rating: "8.8",
@@ -92,12 +112,22 @@ export const hobbies: BentoCategory[] = [
     label: "Code",
     icon: "code",
     cover: "/images/hobby/code.png",
-    cover2: "/images/hobby/code-cover.jpg",
+    cover2: "/images/hobby/code-cover.png",
     description: "Lines That Build.",
+    filler: [
+      {
+        image: "/images/hobby/code-filler1.png",
+        position: "object-[50%_50%] object-cover",
+      },
+      {
+        image: "/images/hobby/code-filler2.png",
+        position: "object-[50%_50%] object-cover",
+      },
+    ],
     entries: [
       {
         title: "Algorithms",
-        image: "/images/hobby/code4.jpg",
+        image: "/images/hobby/code4.png",
         position: "object-[50%_54%]",
         icon: "database",
         rating: "9.6",
@@ -105,7 +135,7 @@ export const hobbies: BentoCategory[] = [
       },
       {
         title: "Data Structures",
-        image: "/images/hobby/code2.jpg",
+        image: "/images/hobby/code2.png",
         position: "object-[50%_50%]",
         icon: "terminal",
         rating: "9.3",
@@ -113,7 +143,7 @@ export const hobbies: BentoCategory[] = [
       },
       {
         title: "Time and Space Complexity",
-        image: "/images/hobby/code3.jpg",
+        image: "/images/hobby/code3.png",
         position: "object-[50%_30%]",
         icon: "code",
         rating: "8.7",
@@ -121,7 +151,7 @@ export const hobbies: BentoCategory[] = [
       },
       {
         title: "Recursion",
-        image: "/images/hobby/code1.jpg",
+        image: "/images/hobby/code1.png",
         position: "object-[50%_30%]",
         icon: "box",
         rating: "8.9",
@@ -133,21 +163,31 @@ export const hobbies: BentoCategory[] = [
     id: "games",
     label: "Games",
     icon: "gamepad",
-    cover: "/images/hobby/game.jpg",
+    cover: "/images/hobby/game.png",
     cover2: "/images/hobby/game-cover3.png",
     description: "Realms I Wander.",
+    filler: [
+      {
+        image: "/images/hobby/game-filler1.png",
+        position: "object-[50%_58%] object-cover",
+      },
+      {
+        image: "/images/hobby/game-filler2.png",
+        position: "object-[50%_54%] object-cover",
+      },
+    ],
     entries: [
       {
         title: "Delta Force",
-        image: "/images/hobby/game1.jpg",
-        position: "object-[50%_18%]",
+        image: "/images/hobby/game1.png",
+        position: "object-[50%_14%]",
         icon: "map",
         rating: "9.6",
         description: "Tactical fights with intensity.",
       },
       {
         title: "Valorant",
-        image: "/images/hobby/game2.jpg",
+        image: "/images/hobby/game2.png",
         position: "object-[50%_14%]",
         icon: "target",
         rating: "9.4",
@@ -155,7 +195,7 @@ export const hobbies: BentoCategory[] = [
       },
       {
         title: "Naraka",
-        image: "/images/hobby/game3.jpg",
+        image: "/images/hobby/game3.png",
         position: "object-[50%_54%]",
         icon: "trophy",
         rating: "9.8",
@@ -163,12 +203,45 @@ export const hobbies: BentoCategory[] = [
       },
       {
         title: "Dota2",
-        image: "/images/hobby/game4.jpg",
+        image: "/images/hobby/game4.png",
         position: "object-[50%_54%]",
         icon: "star",
         rating: "9.1",
         description: "Strategy that never repeats.",
       },
     ],
+  },
+];
+
+export const DECORATIVE_TILES = [
+  {
+    number: "01",
+    caption: "Somewhere",
+    image: "/images/hobby/tile2.png",
+    position: "object-[50%_28%] object-cover",
+  },
+  {
+    number: "03",
+    caption: "and curiosity",
+    image: "/images/hobby/tile5.png",
+    position: "object-[50%_50%] object-cover",
+  },
+  {
+    number: "02",
+    caption: "between work",
+    image: "/images/hobby/tile3.png",
+    position: "object-[50%_52%] object-cover",
+  },
+  {
+    number: "04",
+    caption: "I found",
+    image: "/images/hobby/tile6.png",
+    position: "object-[50%_50%] object-cover",
+  },
+  {
+    number: "05",
+    caption: "things worth keeping.",
+    image: "/images/hobby/tile4.png",
+    position: "object-[50%_50%] object-cover",
   },
 ];

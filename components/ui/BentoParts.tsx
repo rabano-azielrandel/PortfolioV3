@@ -76,13 +76,6 @@ export function mosaicTileSize(position: number): string {
   return "col-span-1 row-span-1 lg:row-span-2";
 }
 
-export const DECORATIVE_TILES = [
-  { number: "01", caption: "four rooms" },
-  { number: "02", caption: "no order" },
-  { number: "03", caption: "pick one" },
-  { number: "04", caption: "in progress" },
-];
-
 /**
  * A blank, numbered filler tile — same look as the decorative tiles above.
  * Used on its own (not through DECORATIVE_TILES) to plug the empty cell the
@@ -92,20 +85,32 @@ export function FillerTile({
   number,
   caption,
   className = "",
+  position = "",
+  background,
 }: {
   number: string;
   caption: string;
+  position?: string;
   className?: string;
+  background: string;
 }) {
   return (
     <div
       aria-hidden="true"
-      className={`col-span-1 row-span-1 flex-col justify-between rounded-lg border border-foreground/10 px-3.5 py-3 ${className}`}
+      className={`relative col-span-1 row-span-1 flex-col justify-between rounded-lg border border-foreground/10 px-3.5 py-3 overflow-hidden ${className}`}
     >
-      <span className="font-sans text-2xl leading-none text-foreground/40">
+      <Image
+        src={background}
+        alt="filler"
+        fill
+        sizes="1"
+        loading="lazy"
+        className={`${position}`}
+      />
+      <span className="z-2 w-fit rounded bg-background/80 px-1.5 py-0.5 font-sans text-2xl leading-none text-foreground/70">
         {number}
       </span>
-      <span className="font-mono text-[10px] uppercase leading-none tracking-[0.16em] text-foreground/50">
+      <span className="z-2 w-fit rounded bg-background/80 px-1.5 py-1 font-mono text-[10px] uppercase leading-none tracking-[0.16em] text-foreground/80">
         {caption}
       </span>
     </div>

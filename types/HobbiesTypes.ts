@@ -30,6 +30,12 @@ export interface BentoEntry {
   meta?: string;
 }
 
+export interface BentoFillerImage {
+  image: string;
+  /** tailwind object-position class, e.g. "object-[50%_60%]" — defaults to centered */
+  position?: string;
+}
+
 export interface BentoCategory {
   id?: string;
   label: string;
@@ -37,6 +43,7 @@ export interface BentoCategory {
   cover: string;
   cover2: string;
   description?: string;
+  filler: BentoFillerImage[];
   entries: BentoEntry[];
 }
 
@@ -49,7 +56,7 @@ export interface HobbiesBentoProps {
   data: BentoCategory[];
   heading?: string;
   subheading?: string;
-  /** how many decorative filler tiles show on the categories screen (0–4) */
+  /** how many decorative filler tiles show on the categories screen (0–5) */
   decorativeTileCount?: number;
   className?: string;
   onChange?: (state: { view: BentoView; categoryIndex: number }) => void;

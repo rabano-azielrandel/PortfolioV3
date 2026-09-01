@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { DECORATIVE_TILES } from "@/data/HobbiesData";
 import {
   BentoGrid,
   Cover,
-  DECORATIVE_TILES,
   ExitTile,
   FillerTile,
   Icon,
@@ -67,24 +67,23 @@ function CategoriesScreen({
 
       {DECORATIVE_TILES.slice(
         0,
-        Math.max(0, Math.min(4, decorativeTileCount)),
+        Math.max(0, Math.min(DECORATIVE_TILES.length, decorativeTileCount)),
       ).map((tile, index) => (
         <FillerTile
           key={tile.number}
           number={tile.number}
           caption={tile.caption}
-          className={index >= 2 ? "hidden sm:flex" : "flex"}
+          background={tile.image}
+          position={tile.position}
+          className={
+            index === 1
+              ? "flex sm:row-span-2"
+              : index === 4
+                ? "flex col-span-2 sm:col-span-1"
+                : "flex"
+          }
         />
       ))}
-
-      {/* the mosaic above only tiles evenly up to 3 columns — at the 4-column
-          breakpoint it leaves one row short by 2 cells, so these two close it */}
-      <FillerTile number="05" caption="the math" className="hidden lg:flex" />
-      <FillerTile
-        number="06"
-        caption="didn't add up"
-        className="hidden lg:flex"
-      />
     </BentoGrid>
   );
 }
@@ -148,12 +147,19 @@ function CategoryScreen({
         </Tile>
       ))}
 
-      {/* same 4-column shortfall as the categories screen — plug it here too */}
-      <FillerTile number="05" caption="the math" className="hidden lg:flex" />
+      <FillerTile
+        number="05"
+        caption="the math"
+        className="flex"
+        background={category.filler[0].image}
+        position={category.filler[0].position}
+      />
       <FillerTile
         number="06"
         caption="didn't add up"
-        className="hidden lg:flex"
+        className="flex"
+        background={category.filler[1].image}
+        position={category.filler[1].position}
       />
     </BentoGrid>
   );
@@ -163,7 +169,7 @@ export function Bento({
   data,
   heading = "Hobbies",
   subheading,
-  decorativeTileCount = 4,
+  decorativeTileCount = 5,
   className = "",
   onChange,
 }: HobbiesBentoProps) {
@@ -209,7 +215,7 @@ export function Bento({
           ) : null}
         </div>
         {hint ? (
-          <span className="max-w-[28ch] text-right font-mono text-[10px] uppercase leading-none tracking-[0.16em] text-foreground/50">
+          <span className="max-w-[28ch] text-left lg:text-right font-mono text-[10px] uppercase leading-none tracking-[0.16em] text-foreground/50">
             {hint}
           </span>
         ) : null}
