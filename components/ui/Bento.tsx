@@ -149,14 +149,14 @@ function CategoryScreen({
 
       <FillerTile
         number="05"
-        caption="the math"
+        caption="SPECIAL"
         className="flex"
         background={category.filler[0].image}
         position={category.filler[0].position}
       />
       <FillerTile
         number="06"
-        caption="didn't add up"
+        caption="MENTION"
         className="flex"
         background={category.filler[1].image}
         position={category.filler[1].position}
